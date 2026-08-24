@@ -21,8 +21,8 @@ jobs:
       - name: Build solution
         run: dotnet build Agent-Failure-Modes.sln --configuration Release --no-restore
       - name: Run Loop Failure demo
-        run: dotnet run --configuration Release --no-build --project samples/LoopFailureDemo
+        run: dotnet run --configuration Release --no-build --project samples/LoopFailureDemo/LoopFailureDemo.csproj
       - name: Run Context Drop demo
-        run: dotnet run --configuration Release --no-build --project samples/ContextDropDemo
+        run: dotnet run --configuration Release --no-build --project samples/ContextDropDemo/ContextDropDemo.csproj
       - name: Run Permission Escalation demo
-        run: dotnet run --configuration Release --no-build --project samples/PermissionEscalationDemo
+        run: dotnet run --configuration Release --no-build --project samples/PermissionEscalationDemo/PermissionEscalationDemo.csproj
