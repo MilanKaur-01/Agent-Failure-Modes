@@ -63,7 +63,7 @@ public sealed class LoopGuard
 
         // --- Budget check #1: iteration count -------------------------------------
         var remainingIterations = _budget.MaxIterations - _iterations;
-        if (remainingIterations < 0)
+        if (remainingIterations <= 0)
         {
             return new LoopEvaluation(
                 LoopDecision.EscalateToHuman,
@@ -75,7 +75,7 @@ public sealed class LoopGuard
         var elapsed = DateTimeOffset.UtcNow - _startedAt;
         var remainingTokens = _budget.MaxTokenBudget - _tokensSpent;
         var remainingTime = _budget.MaxDuration - elapsed;
-        if (remainingTokens < 0 || remainingTime < TimeSpan.Zero)
+        if (remainingTokens <= 0 || remainingTime <= TimeSpan.Zero)
         {
             return new LoopEvaluation(
                 LoopDecision.EscalateToHuman,
