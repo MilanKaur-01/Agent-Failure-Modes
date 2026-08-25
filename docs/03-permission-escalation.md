@@ -2,14 +2,13 @@
 
 ## The problem
 
-Function-calling / tool-using agents are only as safe as the tools you let them
-touch. The risk isn't only "the model does something malicious" — it's much more
-often "the model is confused, or a user manipulates it with a clever prompt, and it
-ends up calling a tool it should never have been trusted with in the first place."
+LLMs are wired to complete a task no matter what and in the process, they may get
+access to credentials they should not use and may end up doing something
+catastrophic like deleting production database.
 
 A helpdesk triage agent that can call `ResetPassword` is useful. The same agent
 being able to call `DeleteUser` or `GrantAdmin` autonomously is a very different risk
-profile — and "the system prompt told it not to" is not a safeguard, because prompts
+profile, and "the system prompt told it not to" is not a safeguard, because prompts
 are not access control.
 
 ## The technique

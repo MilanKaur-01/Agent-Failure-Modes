@@ -9,12 +9,9 @@ result isn't changing. Maybe it's stuck trying to satisfy an instruction that's
 actually impossible with the tools it has. Maybe a bug in your orchestration code
 means "try again" never actually terminates.
 
-In production, this isn't just annoying — it's expensive (every iteration burns
-tokens and, often, real API calls) and it can be unsafe (an agent that "just keeps
-trying" might eventually try something destructive out of desperation).
+In production, this can turn into an expensive loop burning tokens.
 
-The fix is **not** "make the model smarter." The fix is an external, deterministic
-guard that the agent *cannot* argue its way around.
+The fix is to have deterministic guardrails in place and define exit conditions.
 
 ## The technique
 

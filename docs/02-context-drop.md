@@ -4,14 +4,14 @@
 
 Every LLM has a finite context window, and even when the window is technically large
 enough, sending the full conversation history on every turn gets expensive fast. So
-agent frameworks trim history — and the naive approach is to drop the *oldest* turns
+agent frameworks trim history, and the naive approach is to drop the *oldest* turns
 first, on the theory that older = less relevant.
 
 That assumption breaks down constantly in agent workloads. The oldest turn is often
 where the important instruction lives: "this is a Tier-1 VIP, never auto-close their
 ticket," "always CC security on this," "the customer already agreed to a refund, just
 process it." If that turn gets silently truncated, the agent loses track of a
-constraint that actually matters — and it won't tell you, because from its point of
+constraint that actually matters, and it won't tell you, because from its point of
 view the instruction never existed.
 
 ## The technique
