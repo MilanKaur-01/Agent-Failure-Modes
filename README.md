@@ -1,52 +1,42 @@
 # Agent-Failure-Modes
 
-**A hands-on, runnable teaching repo for three ways LLM agents fail in production —
-and the concrete safeguards that fix each one.**
+**A runnable repository for handling three most common AI agent failure modes.**
 
 If you're building (or reviewing) an agent that can call tools on its own, this repo
-is for you. It's built around a deliberately *simple* helpdesk triage agent using
-[Microsoft Semantic Kernel](https://github.com/microsoft/semantic-kernel) in C#/.NET
-— the agent itself is trivial on purpose, so all your attention goes to the
+is for you. It's built around a *simple* helpdesk triage agent using
+[Microsoft Semantic Kernel](https://github.com/microsoft/semantic-kernel) in C#/.NET. The agent logic is trivial on purpose, so all your attention goes to the
 safeguards wrapped around it.
 
-> 🎓 This is teaching material, not a production framework. Every safeguard is real,
-> runnable code — but simplified so the *idea* is easy to see. See
-> [Key takeaways / production notes](#key-takeaways--production-notes) for what to
-> harden before you ship anything like this for real.
+> 🎓 The solutions in this repo are simplified so the *idea* is easy to see. For converting this to production code, see
+> [Key takeaways / production notes](#key-takeaways--production-notes)
 
 ---
 
-## Why agent failure modes matter
-
-Once you let an LLM decide what to do next — which tool to call, whether to keep
-trying, what to remember — you've handed it a surprising amount of control over your
-system's behavior. Three failure patterns show up again and again:
+## What can go wrong with your AI agent?
 
 - **The agent won't stop.** It keeps retrying the same failing action, burning tokens
   and API calls, because nothing tells it "this isn't working, stop and hand off."
 - **The agent forgets what matters.** As a conversation grows, something has to give
-  way to fit the context window — and if you truncate blindly, the very first
+  way to fit the context window and if you truncate blindly, the very first
   instruction (often the most important one) is usually the first thing dropped.
 - **The agent reaches for more than it should.** A confused model, a manipulated
-  prompt, or a buggy tool-selection step can lead an agent to attempt an action —
-  delete a record, grant a permission — that it should never be trusted to perform
-  on its own.
+  prompt, or a buggy tool-selection step can lead an agent to attempt an action it's not supposed to do like
+  delete a record, grant a permission.
 
-None of these are exotic edge cases. They're the default behavior of a loop with no
-guardrails. This repo shows you how to add those guardrails in plain C# code.
+These are the most common failure modes that must be handled before shipping any AI agent in prod. This repo shows you how to add those guardrails in plain C# code.
 
 ## What you'll learn
 
 - How to wrap an agent's reasoning loop with an iteration/token/time **budget** and a
   **stall detector**, so it always resolves to *continue*, *exit*, or
-  *escalate-to-human* — never "loop forever."
+  *escalate-to-human* 
 - How to keep critical instructions alive in a long conversation using **pinned
   facts**, **rolling summarization**, and **token-budget-based trimming**.
 - How to enforce **least privilege** for agent tool calls with a **deny-by-default
   allow-list**, a **permission ceiling**, and **short-lived, scoped credential
   leases**.
 - How to structure this kind of safety code so it's a genuine choke point the agent
-  can't talk its way around — not just a comment in a system prompt.
+  can't talk its way around. 
 
 ## The base example
 
@@ -56,10 +46,6 @@ stubs** — `LookupTicket`, `ResetPassword`, and `EscalateToHuman` return fake s
 and nothing here talks to a real ticketing system. There's also one deliberately
 **sensitive** pair of tools, `DeleteUser` / `GrantAdmin`, included *only* so the
 permission-ceiling safeguard has something dangerous to deny.
-
-Why so simple? Because the goal of this repo is the safeguards, not the agent. If the
-agent were doing something complicated, it would compete for your attention with the
-part that actually matters.
 
 ```
    ┌──────────┐        ┌───────────────────┐        ┌────────────────────┐
@@ -128,9 +114,8 @@ Console.WriteLine(context.EnforceBudget()); // summarizes older turns once over 
 
 ### 3. Permission escalation
 
-**The problem:** an agent (confused, manipulated, or buggy) attempts an action —
-deleting a user, granting admin — that it should never be trusted to perform
-autonomously.
+**The problem:** an agent (confused, manipulated, or buggy) attempts an action like 
+deleting a user, granting admin. Something it should not be able to perform autonomously.
 
 **The technique:** a `PermissionGate` enforces a deny-by-default allow-list plus a
 hard permission ceiling for sensitive tools, and requires a live, correctly-scoped,
@@ -171,7 +156,7 @@ Agent-Failure-Modes/
 ## Prerequisites
 
 - [.NET SDK 8.0](https://dotnet.microsoft.com/download) or later.
-- **No API key required** to run the three safeguard demos — they're designed to run
+- **No API key required** to run the three safeguard demos. They're designed to run
   fully offline using scripted/deterministic data, so you can see every safeguard
   fire without spending a cent or configuring anything.
 - If you want to wire the `Agent` project up to a real Semantic Kernel model, set
@@ -201,7 +186,7 @@ dotnet run --project samples/ContextDropDemo
 dotnet run --project samples/PermissionEscalationDemo
 ```
 
-Each demo prints a narrated, step-by-step trace to the console — you'll see the
+Each demo prints a narrated, step-by-step trace to the console. You'll see the
 budget or token count ticking down, the exact decision made at each step, and a final
 summary explaining what just happened and why it matters.
 
@@ -234,8 +219,7 @@ this pattern for real systems, consider hardening:
 
 ## Contributing
 
-This is a teaching sample maintained for a developer-advocate audience. Issues and
-PRs that improve clarity, fix bugs, or add another well-scoped failure mode/safeguard
+Issues and PRs that improve clarity, fix bugs, or add another well-scoped failure mode/safeguard
 are welcome.
 
 ## License
