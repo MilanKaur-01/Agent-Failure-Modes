@@ -204,9 +204,7 @@ this pattern for real systems, consider hardening:
 - **PermissionGate / CredentialBroker**: back the credential lease with a real
   short-lived-credential mechanism (cloud IAM temp tokens, Vault/Key Vault dynamic
   secrets, short-`exp` signed JWTs), and log every permission decision for auditability.
-- All three safeguards should be **tested independently of the LLM** — that's exactly
-  why the samples in this repo run without a live model, and it's a pattern worth
-  keeping in real systems too.
+- All three safeguards should be **tested independently of the LLM**.
 
 ## Further reading
 
